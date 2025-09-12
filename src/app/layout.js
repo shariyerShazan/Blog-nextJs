@@ -1,5 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/shared/Navbar";
+import {persistStore} from "redux-persist";
+import store from "@/redux/reduxStore";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { ToastContainer } from "react-toastify";
+let persistor = persistStore(store)
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +29,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Provider store={store} >
+          <PersistGate loading={null} persistor={persistor}>
+                  <Navbar />
+                  {children}
+                  <ToastContainer />
+          </PersistGate>
+        </Provider>
       </body>
     </html>
   );
